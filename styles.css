@@ -6,21 +6,22 @@
 }
 
 :root {
-    --primary-color: #2B2B2B;
-    --secondary-color: #1E88E5;
+    --primary-color: #1E88E5;
+    --secondary-color: #0D47A1;
     --accent-color: #64B5F6;
-    --background-color: #FFFFFF;
+    --background-color: #e0faff;
+    --background-gradient-end: #f0f4ff;
     --text-color: #2B2B2B;
     --light-text: #757575;
     --white: #FFFFFF;
-    --shadow-color: rgba(0, 0, 0, 0.1);
-    --gradient-start: #2B2B2B;
-    --gradient-end: #1E88E5;
+    --shadow-color: rgba(30, 136, 229, 0.1);
+    --gradient-start: #1E88E5;
+    --gradient-end: #0D47A1;
 }
 
 body {
     font-family: 'Poppins', sans-serif !important;
-    background-color: var(--background-color);
+    background: linear-gradient(135deg, var(--background-color) 0%, var(--background-gradient-end) 100%);
     color: var(--text-color);
     line-height: 1.6;
     min-height: 100vh;
@@ -145,7 +146,7 @@ body {
 /* Features Section */
 .features {
     padding: 6rem 0;
-    background-color: var(--white);
+    background: linear-gradient(135deg, var(--background-gradient-end) 0%, var(--background-color) 100%);
 }
 
 .features h2 {
@@ -179,6 +180,7 @@ body {
     text-align: center;
     box-shadow: 0 4px 20px var(--shadow-color);
     transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
 }
 
 .feature-card:hover {
@@ -372,7 +374,7 @@ body {
     font-size: 0.9rem;
     padding: 0.8rem 1.5rem;
     border-radius: 20px;
-    background: rgba(46, 125, 50, 0.1);
+    background: rgba(30, 136, 229, 0.1);
     transition: all 0.3s ease;
     font-weight: 500;
 }

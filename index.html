@@ -12,10 +12,11 @@
     <style>
         /* Fallback styles in case external CSS fails to load */
         :root {
-            --primary-color: #2E7D32;
-            --secondary-color: #1B5E20;
-            --accent-color: #81C784;
-            --background-color: #F1F8E9;
+            --primary-color: #1E88E5;
+            --secondary-color: #0D47A1;
+            --accent-color: #64B5F6;
+            --background-color: #e0faff;
+            --background-gradient-end: #f0f4ff;
             --text-color: #212121;
             --white: #FFFFFF;
         }
@@ -24,12 +25,12 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--background-color);
+            background: linear-gradient(135deg, var(--background-color) 0%, var(--background-gradient-end) 100%);
             color: var(--text-color);
         }
 
         .main-header {
-            background: linear-gradient(135deg, #43A047, #2E7D32);
+            background: linear-gradient(135deg, #1E88E5, #0D47A1);
             color: var(--white);
             padding: 1rem;
             position: fixed;
@@ -47,7 +48,7 @@
 
         .hero {
             padding-top: 80px;
-            background: linear-gradient(135deg, #43A047, #2E7D32);
+            background: linear-gradient(135deg, #1E88E5, #0D47A1);
             color: var(--white);
             text-align: center;
             min-height: 400px;
