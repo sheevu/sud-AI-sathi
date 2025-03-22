@@ -4,134 +4,160 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>किसान साथी GPT - आपका कृषि सहायक</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Header -->
-    <header>
-        <div class="logo-container">
-            <h1>किसान साथी GPT</h1>
-            <p class="subtitle">by Sudarshan AI Labs</p>
-        </div>
-        <div class="language-selector">
-            <select id="language">
-                <option value="hi">हिंदी</option>
-                <option value="en">English</option>
-            </select>
+    <header class="main-header">
+        <div class="container">
+            <div class="logo-container">
+                <h1>किसान साथी GPT</h1>
+                <p class="subtitle">by Sudarshan AI Labs</p>
+            </div>
+            <div class="nav-container">
+                <select id="language" class="language-selector">
+                    <option value="hi">हिंदी</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
         </div>
     </header>
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-content">
-            <h1>आपका कृषि सहायक</h1>
-            <p>किसान साथी GPT के साथ कृषि में AI की शक्ति का अनुभव करें। तुरंत कृषि सलाह, फसल प्रबंधन टिप्स, और कृषि चुनौतियों का समाधान प्राप्त करें।</p>
-            <div class="hero-buttons">
-                <button class="btn primary" id="startBtn">शुरू करें</button>
-                <button class="btn secondary" id="learnMoreBtn">और जानें</button>
+        <div class="container">
+            <div class="hero-content">
+                <h1>आपका कृषि सहायक</h1>
+                <p>किसान साथी GPT के साथ कृषि में AI की शक्ति का अनुभव करें। तुरंत कृषि सलाह, फसल प्रबंधन टिप्स, और कृषि चुनौतियों का समाधान प्राप्त करें।</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" id="startBtn">शुरू करें</button>
+                    <button class="btn btn-secondary" id="learnMoreBtn">और जानें</button>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
     <section class="features">
-        <h2>AI सुविधाएं</h2>
-        <p>जानें कि हमारा AI सहायक आपके लिए क्या कर सकता है</p>
-        
-        <div class="feature-cards">
-            <div class="feature-card">
-                <i class="fas fa-microphone"></i>
-                <h3>आवाज सहायक</h3>
-                <p>अपनी भाषा में बात करें</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-seedling"></i>
-                <h3>फसल सलाह</h3>
-                <p>सर्वोत्तम फसल चुनें</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-tint"></i>
-                <h3>सिंचाई सलाह</h3>
-                <p>पानी बचाएं</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Chat Section -->
-    <section class="chat-container" id="chatSection">
-        <div class="chat-header">
-            <h3>अपने सवाल पूछें</h3>
-        </div>
-        <div class="chat-messages" id="chatMessages">
-            <!-- Messages will be added here dynamically -->
-        </div>
-        <div class="chat-input">
-            <textarea id="userInput" placeholder="अपना संदेश लिखें या माइक बटन दबाएं..."></textarea>
-            <button id="sendMessage" class="send-button">
-                <i class="fas fa-paper-plane"></i>
-            </button>
-        </div>
-    </section>
-
-    <!-- Action Buttons -->
-    <section class="action-buttons">
-        <div class="action-btn-container">
-            <button class="action-btn" id="uploadImage">
-                <span class="action-icon">📷</span>
-                <span class="action-text">फसल रोग पहचान</span>
-            </button>
-            <div class="button-links">
-                <a href="#" class="btn-link">रोग जानकारी</a>
-                <a href="#" class="btn-link">उपचार विधियां</a>
-            </div>
-        </div>
-        <div class="action-btn-container">
-            <button class="action-btn" id="talkToAI">
-                <span class="action-icon">🎙️</span>
-                <span class="action-text">आवाज से पूछें</span>
-            </button>
-            <div class="button-links">
-                <a href="#" class="btn-link">आवाज सहायता</a>
-                <a href="https://services.india.gov.in/service/detail/major-schemes-for-farmers" class="btn-link" target="_blank">सरकारी योजनाएं</a>
-            </div>
-        </div>
-        <div class="action-btn-container">
-            <button class="action-btn" id="weatherInfo">
-                <span class="action-icon">🌤️</span>
-                <span class="action-text">मौसम जानकारी</span>
-            </button>
-            <div class="button-links">
-                <a href="#" class="btn-link">मौसम पूर्वानुमान</a>
-                <a href="#" class="btn-link">फसल कैलेंडर</a>
+        <div class="container">
+            <h2>AI सुविधाएं</h2>
+            <p class="section-description">जानें कि हमारा AI सहायक आपके लिए क्या कर सकता है</p>
+            
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <i class="fas fa-microphone"></i>
+                    <h3>आवाज सहायक</h3>
+                    <p>अपनी भाषा में बात करें</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-seedling"></i>
+                    <h3>फसल सलाह</h3>
+                    <p>सर्वोत्तम फसल चुनें</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-tint"></i>
+                    <h3>सिंचाई सलाह</h3>
+                    <p>पानी बचाएं</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Weather Widget -->
-    <section class="weather-widget" id="weatherWidget">
-        <h3>स्थानीय मौसम</h3>
-        <div class="weather-content">
-            <!-- Weather information will be added here dynamically -->
+    <!-- Main Content Section -->
+    <main class="main-content">
+        <div class="container">
+            <div class="content-grid">
+                <!-- Chat Section -->
+                <section class="chat-container" id="chatSection">
+                    <div class="chat-header">
+                        <h3>अपने सवाल पूछें</h3>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Messages will be added here dynamically -->
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="userInput" placeholder="अपना संदेश लिखें या माइक बटन दबाएं...">
+                        <button id="sendMessage" class="send-button">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Action Buttons -->
+                <section class="action-buttons">
+                    <div class="action-btn-container">
+                        <button class="action-btn" id="uploadImage">
+                            <span class="action-icon"><i class="fas fa-camera"></i></span>
+                            <span class="action-text">फसल रोग पहचान</span>
+                        </button>
+                        <div class="button-links">
+                            <a href="#" class="btn-link">रोग जानकारी</a>
+                            <a href="#" class="btn-link">उपचार विधियां</a>
+                        </div>
+                    </div>
+                    <div class="action-btn-container">
+                        <button class="action-btn" id="talkToAI">
+                            <span class="action-icon"><i class="fas fa-microphone"></i></span>
+                            <span class="action-text">आवाज से पूछें</span>
+                        </button>
+                        <div class="button-links">
+                            <a href="#" class="btn-link">आवाज सहायता</a>
+                            <a href="https://services.india.gov.in/service/detail/major-schemes-for-farmers" class="btn-link" target="_blank">सरकारी योजनाएं</a>
+                        </div>
+                    </div>
+                    <div class="action-btn-container">
+                        <button class="action-btn" id="weatherInfo">
+                            <span class="action-icon"><i class="fas fa-cloud-sun"></i></span>
+                            <span class="action-text">मौसम जानकारी</span>
+                        </button>
+                        <div class="button-links">
+                            <a href="#" class="btn-link">मौसम पूर्वानुमान</a>
+                            <a href="#" class="btn-link">फसल कैलेंडर</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Weather Widget -->
+                <section class="weather-widget" id="weatherWidget">
+                    <div class="weather-header">
+                        <h3>स्थानीय मौसम</h3>
+                    </div>
+                    <div class="weather-content">
+                        <!-- Weather information will be added here dynamically -->
+                    </div>
+                </section>
+            </div>
         </div>
-    </section>
+    </main>
 
     <!-- Footer -->
-    <footer>
-        <div class="footer-section brand">
-            <p>किसान साथी GPT by Sudarshan AI Labs</p>
-        </div>
-        <div class="footer-section links">
-            <a href="#" class="footer-link">हमारे बारे में</a>
-            <a href="#" class="footer-link">सुविधाएं</a>
-            <a href="https://services.india.gov.in/service/detail/major-schemes-for-farmers" class="footer-link" target="_blank">सरकारी योजनाएं</a>
-            <a href="#" class="footer-link">संपर्क करें</a>
-        </div>
-        <div class="footer-section social">
-            <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
-            <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section brand">
+                    <h3>किसान साथी GPT</h3>
+                    <p>by Sudarshan AI Labs</p>
+                </div>
+                <div class="footer-section links">
+                    <h4>उपयोगी लिंक्स</h4>
+                    <nav>
+                        <a href="#" class="footer-link">हमारे बारे में</a>
+                        <a href="#" class="footer-link">सुविधाएं</a>
+                        <a href="https://services.india.gov.in/service/detail/major-schemes-for-farmers" class="footer-link" target="_blank">सरकारी योजनाएं</a>
+                        <a href="#" class="footer-link">संपर्क करें</a>
+                    </nav>
+                </div>
+                <div class="footer-section social">
+                    <h4>सोशल मीडिया</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
 
