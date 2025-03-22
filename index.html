@@ -19,6 +19,7 @@
             --background-gradient-end: #f0f4ff;
             --text-color: #212121;
             --white: #FFFFFF;
+            --shadow-color: rgba(30, 136, 229, 0.1);
         }
         
         body {
@@ -30,13 +31,15 @@
         }
 
         .main-header {
-            background: linear-gradient(135deg, #1E88E5, #0D47A1);
-            color: var(--white);
+            background: linear-gradient(135deg, var(--background-color) 0%, var(--background-gradient-end) 100%);
+            color: var(--text-color);
             padding: 1rem;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px var(--shadow-color);
         }
 
         .container {
@@ -48,12 +51,36 @@
 
         .hero {
             padding-top: 80px;
-            background: linear-gradient(135deg, #1E88E5, #0D47A1);
-            color: var(--white);
+            background: linear-gradient(135deg, var(--background-color) 0%, var(--background-gradient-end) 100%);
+            color: var(--text-color);
             text-align: center;
             min-height: 400px;
             display: flex;
             align-items: center;
+        }
+
+        .hero h1 {
+            color: var(--primary-color);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
     </style>
 </head>

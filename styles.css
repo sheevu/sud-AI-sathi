@@ -15,8 +15,6 @@
     --light-text: #757575;
     --white: #FFFFFF;
     --shadow-color: rgba(30, 136, 229, 0.1);
-    --gradient-start: #1E88E5;
-    --gradient-end: #0D47A1;
 }
 
 body {
@@ -36,48 +34,49 @@ body {
 
 /* Header */
 .main-header {
-    background: var(--primary-color);
-    color: var(--white);
+    background: linear-gradient(135deg, var(--background-color) 0%, var(--background-gradient-end) 100%);
+    color: var(--text-color);
     padding: 1rem 0;
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
     box-shadow: 0 2px 10px var(--shadow-color);
+    backdrop-filter: blur(10px);
 }
 
 .logo-container h1 {
     font-size: 1.8rem;
     margin: 0;
-    color: var(--white);
+    color: var(--primary-color);
 }
 
 .subtitle {
     font-size: 0.9rem;
     opacity: 0.9;
-    color: var(--white);
+    color: var(--text-color);
 }
 
 .language-selector {
     padding: 0.5rem;
-    border: 2px solid var(--white);
+    border: 2px solid var(--primary-color);
     border-radius: 5px;
     background: transparent;
-    color: var(--white);
+    color: var(--text-color);
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
 }
 
 .language-selector option {
-    background: var(--primary-color);
-    color: var(--white);
+    background: var(--white);
+    color: var(--text-color);
 }
 
 /* Hero Section */
 .hero {
     padding: 8rem 0 4rem;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    color: var(--white);
+    background: linear-gradient(135deg, var(--background-color) 0%, var(--background-gradient-end) 100%);
+    color: var(--text-color);
     text-align: center;
     min-height: 500px;
     display: flex;
@@ -94,6 +93,7 @@ body {
     font-size: 3.5rem;
     margin-bottom: 1.5rem;
     font-weight: 700;
+    color: var(--primary-color);
 }
 
 .hero p {
@@ -101,6 +101,7 @@ body {
     margin-bottom: 2rem;
     opacity: 0.9;
     line-height: 1.8;
+    color: var(--text-color);
 }
 
 /* Buttons */
@@ -119,27 +120,26 @@ body {
 }
 
 .btn-primary {
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
     color: var(--white);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px var(--shadow-color);
 }
 
 .btn-primary:hover {
-    background-color: var(--accent-color);
-    color: var(--white);
+    background-color: var(--secondary-color);
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 20px var(--shadow-color);
 }
 
 .btn-secondary {
     background-color: transparent;
-    border: 2px solid var(--white);
-    color: var(--white);
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
 }
 
 .btn-secondary:hover {
-    background-color: var(--white);
-    color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: var(--white);
     transform: translateY(-3px);
 }
 
@@ -387,17 +387,19 @@ body {
 
 /* Weather Widget */
 .weather-widget {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    background: linear-gradient(135deg, var(--background-color) 0%, var(--background-gradient-end) 100%);
     border-radius: 20px;
     overflow: hidden;
-    color: var(--white);
+    color: var(--text-color);
+    border: 2px solid var(--primary-color);
 }
 
 .weather-header {
     padding: 1.5rem;
     text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--primary-color);
     font-size: 1.2rem;
+    color: var(--primary-color);
 }
 
 .weather-content {
@@ -434,7 +436,7 @@ body {
 
 /* Footer */
 .main-footer {
-    background: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     color: var(--white);
     padding: 4rem 0;
     margin-top: 4rem;
