@@ -213,6 +213,13 @@ header {
     margin: 0 auto;
 }
 
+.action-btn-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
 .action-btn {
     display: flex;
     flex-direction: column;
@@ -228,14 +235,32 @@ header {
     gap: 1rem;
 }
 
-.action-btn span {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
-
 .action-btn:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+.button-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    background: rgba(0, 102, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.btn-link:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
 }
 
 /* Weather Widget */
@@ -333,6 +358,17 @@ footer {
     
     .chat-container {
         margin: 1rem;
+    }
+
+    .button-links {
+        width: 100%;
+        justify-content: space-around;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-link {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
     }
 }
 

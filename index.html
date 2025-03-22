@@ -77,18 +77,36 @@
 
     <!-- Action Buttons -->
     <section class="action-buttons">
-        <button class="action-btn" id="uploadImage">
-            <span class="action-icon">📷</span>
-            <span class="action-text">फसल रोग पहचान</span>
-        </button>
-        <button class="action-btn" id="talkToAI">
-            <span class="action-icon">🎙️</span>
-            <span class="action-text">आवाज से पूछें</span>
-        </button>
-        <button class="action-btn" id="weatherInfo">
-            <span class="action-icon">🌤️</span>
-            <span class="action-text">मौसम जानकारी</span>
-        </button>
+        <div class="action-btn-container">
+            <button class="action-btn" id="uploadImage">
+                <span class="action-icon">📷</span>
+                <span class="action-text">फसल रोग पहचान</span>
+            </button>
+            <div class="button-links">
+                <a href="#" class="btn-link">रोग जानकारी</a>
+                <a href="#" class="btn-link">उपचार विधियां</a>
+            </div>
+        </div>
+        <div class="action-btn-container">
+            <button class="action-btn" id="talkToAI">
+                <span class="action-icon">🎙️</span>
+                <span class="action-text">आवाज से पूछें</span>
+            </button>
+            <div class="button-links">
+                <a href="#" class="btn-link">आवाज सहायता</a>
+                <a href="https://services.india.gov.in/service/detail/major-schemes-for-farmers" class="btn-link" target="_blank">सरकारी योजनाएं</a>
+            </div>
+        </div>
+        <div class="action-btn-container">
+            <button class="action-btn" id="weatherInfo">
+                <span class="action-icon">🌤️</span>
+                <span class="action-text">मौसम जानकारी</span>
+            </button>
+            <div class="button-links">
+                <a href="#" class="btn-link">मौसम पूर्वानुमान</a>
+                <a href="#" class="btn-link">फसल कैलेंडर</a>
+            </div>
+        </div>
     </section>
 
     <!-- Weather Widget -->
@@ -107,6 +125,7 @@
         <div class="footer-section links">
             <a href="#" class="footer-link">हमारे बारे में</a>
             <a href="#" class="footer-link">सुविधाएं</a>
+            <a href="https://services.india.gov.in/service/detail/major-schemes-for-farmers" class="footer-link" target="_blank">सरकारी योजनाएं</a>
             <a href="#" class="footer-link">संपर्क करें</a>
         </div>
         <div class="footer-section social">
