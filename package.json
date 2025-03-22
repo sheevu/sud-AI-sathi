@@ -1,0 +1,12 @@
+{
+  "name": "kisaan-sathi-gpt",
+  "version": "1.0.0",
+  "description": "AI-powered farming assistant",
+  "main": "script.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "openai": "^4.28.0"
+  }
+} 

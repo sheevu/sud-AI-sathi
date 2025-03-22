@@ -21,9 +21,6 @@ const chatSection = document.getElementById('chatSection');
 const weatherWidget = document.getElementById('weatherWidget');
 
 // OpenAI API configuration
-const OPENAI_API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
-// In production, these should be set in your Vercel environment variables
-const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY || 'your-api-key-here';
 const WEATHER_API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY || 'your-weather-api-key';
 const WEATHER_API_ENDPOINT = 'https://api.openweathermap.org/data/2.5/weather';
 
@@ -75,6 +72,36 @@ const commonDiseases = {
         symptoms: 'पत्तियों पर सफेद धब्बे',
         organic_treatment: 'त्रिकोडर्मा विरिडी',
         chemical_treatment: 'कार्बेन्डाजिम'
+    }
+};
+
+// Language translations
+const translations = {
+    hi: {
+        welcome: "किसान साथी में आपका स्वागत है",
+        placeholder: "यहां टाइप करें...",
+        start: "शुरू करें",
+        learnMore: "और जानें",
+        features: "हमारी विशेषताएं",
+        aiAssistant: "AI सहायक",
+        weatherInfo: "मौसम जानकारी",
+        cropHealth: "फसल स्वास्थ्य",
+        askQuestion: "अपने प्रश्न पूछें",
+        loading: "लोड हो रहा है...",
+        humidity: "आर्द्रता"
+    },
+    en: {
+        welcome: "Welcome to Kisaan Sathi",
+        placeholder: "Type here...",
+        start: "Get Started",
+        learnMore: "Learn More",
+        features: "Our Features",
+        aiAssistant: "AI Assistant",
+        weatherInfo: "Weather Info",
+        cropHealth: "Crop Health",
+        askQuestion: "Ask Your Questions",
+        loading: "Loading...",
+        humidity: "Humidity"
     }
 };
 
@@ -172,43 +199,14 @@ async function handleChatInput(message) {
     sendButton.disabled = true;
 
     try {
-        // First check if we have the API key
-        if (!OPENAI_API_KEY || OPENAI_API_KEY === 'your-api-key-here') {
-            addMessage('API कुंजी कॉन्फ़िगर नहीं की गई है। कृपया अपनी OpenAI API कुंजी सेट करें।');
-            sendButton.disabled = false;
-            return;
-        }
-
-        const response = await fetch(OPENAI_API_ENDPOINT, {
+        const response = await fetch('/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${OPENAI_API_KEY}`
             },
             body: JSON.stringify({
-                model: "gpt-3.5-turbo",
-                messages: [
-                    {
-                        role: "system",
-                        content: `You are किसान साथी (Kisaan Saathi), a knowledgeable farming assistant who speaks Hindi and English. 
-                        Your primary role is to help Indian farmers with agricultural advice, focusing on:
-                        1. Sustainable farming practices
-                        2. Crop disease identification and treatment
-                        3. Weather-based farming recommendations
-                        4. Government schemes and support
-                        5. Modern farming techniques
-                        
-                        Always respond in Hindi first, followed by English translation if needed.
-                        Keep responses practical and actionable.
-                        Include traditional farming wisdom when relevant.`
-                    },
-                    {
-                        role: "user",
-                        content: message
-                    }
-                ],
-                temperature: 0.7,
-                max_tokens: 500
+                message: message,
+                language: document.getElementById('languageSelector').value
             })
         });
 
@@ -217,20 +215,24 @@ async function handleChatInput(message) {
         }
 
         const data = await response.json();
+        
         if (data.error) {
-            throw new Error(data.error.message);
+            throw new Error(data.error);
         }
 
-        const aiResponse = data.choices[0].message.content;
-        addMessage(aiResponse);
+        addMessage(data.response, false);
         
-        // Only speak the Hindi part of the response
-        const hindiResponse = aiResponse.split('\n')[0];
-        speakText(hindiResponse);
+        // Speak the response if it's in Hindi
+        if (document.getElementById('languageSelector').value === 'hi') {
+            speakText(data.response);
+        }
 
     } catch (error) {
         console.error('Chat Error:', error);
-        addMessage('माफ़ कीजिए, कोई त्रुटि हुई। कृपया पुनः प्रयास करें।\n\nSorry, an error occurred. Please try again.');
+        const errorMessage = document.getElementById('languageSelector').value === 'hi'
+            ? 'माफ़ कीजिए, कोई त्रुटि हुई। कृपया पुनः प्रयास करें।'
+            : 'Sorry, an error occurred. Please try again.';
+        addMessage(errorMessage, false);
     }
 
     sendButton.disabled = false;
@@ -307,4 +309,140 @@ window.addEventListener('load', () => {
             updateWeatherWidget(weatherData);
         });
     }
+});
+
+// Initialize the chat interface
+document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const chatMessages = document.getElementById('chatMessages');
+    const userInput = document.getElementById('userInput');
+    const sendButton = document.getElementById('sendButton');
+    const languageSelector = document.getElementById('languageSelector');
+    const startButton = document.getElementById('startButton');
+    const learnMoreButton = document.getElementById('learnMoreButton');
+    const weatherButton = document.getElementById('weatherButton');
+    const voiceButton = document.getElementById('voiceButton');
+    const diseaseButton = document.getElementById('diseaseButton');
+
+    // Current language
+    let currentLang = 'hi';
+
+    // Initialize weather display
+    updateWeather();
+
+    // Add welcome message
+    addMessage('assistant', translations[currentLang].welcome);
+
+    // Language switching
+    languageSelector.addEventListener('change', function(e) {
+        currentLang = e.target.value;
+        updateLanguage();
+    });
+
+    // Send message function
+    async function sendMessage() {
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        // Add user message to chat
+        addMessage('user', message);
+        
+        // Clear input
+        userInput.value = '';
+
+        // Add loading message
+        const loadingMessage = translations[currentLang].loading;
+        addMessage('assistant', loadingMessage);
+
+        try {
+            // Make API call to OpenAI
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message, language: currentLang })
+            });
+
+            if (!response.ok) {
+                throw new Error('API call failed');
+            }
+
+            const data = await response.json();
+            
+            // Remove loading message
+            chatMessages.removeChild(chatMessages.lastChild);
+            
+            // Add AI response
+            addMessage('assistant', data.response);
+
+        } catch (error) {
+            console.error('Error:', error);
+            // Remove loading message
+            chatMessages.removeChild(chatMessages.lastChild);
+            // Add error message
+            addMessage('assistant', currentLang === 'hi' ? 
+                'माफ़ कीजिए, कोई त्रुटि हुई। कृपया पुनः प्रयास करें।' : 
+                'Sorry, an error occurred. Please try again.'
+            );
+        }
+    }
+
+    // Send button click
+    sendButton.addEventListener('click', sendMessage);
+
+    // Enter key press
+    userInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // Update language throughout the interface
+    function updateLanguage() {
+        userInput.placeholder = translations[currentLang].placeholder;
+        document.querySelector('.features h2').textContent = translations[currentLang].features;
+        document.querySelector('.chat-header h3').textContent = translations[currentLang].askQuestion;
+        updateWeather();
+    }
+
+    // Weather functionality
+    function updateWeather() {
+        const temperature = Math.floor(Math.random() * 15) + 20;
+        const humidity = Math.floor(Math.random() * 30) + 50;
+        const descriptions = {
+            hi: ['साफ़ आसमान', 'आंशिक बादल', 'बादल छाए'],
+            en: ['Clear Sky', 'Partly Cloudy', 'Cloudy']
+        };
+        const descIndex = Math.floor(Math.random() * 3);
+
+        document.getElementById('temperature').textContent = `${temperature}°C`;
+        document.getElementById('humidity').textContent = `${translations[currentLang].humidity}: ${humidity}%`;
+        document.getElementById('weatherDescription').textContent = descriptions[currentLang][descIndex];
+    }
+
+    // Button click handlers
+    startButton.addEventListener('click', () => {
+        document.querySelector('.chat-container').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    learnMoreButton.addEventListener('click', () => {
+        document.querySelector('.features').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    weatherButton.addEventListener('click', () => {
+        updateWeather();
+    });
+
+    voiceButton.addEventListener('click', () => {
+        alert(currentLang === 'hi' ? 'आवाज सुविधा जल्द ही उपलब्ध होगी' : 'Voice feature coming soon');
+    });
+
+    diseaseButton.addEventListener('click', () => {
+        alert(currentLang === 'hi' ? 'रोग पहचान सुविधा जल्द ही उपलब्ध होगी' : 'Disease detection feature coming soon');
+    });
+
+    // Initial language update
+    updateLanguage();
 }); 

@@ -1,66 +1,68 @@
-# Kisaan Sathi GPT
+# Kisaan Sathi GPT - AI Farming Assistant
 
-A modern AI-powered farming assistant that helps farmers with crop recommendations, disease detection, and weather updates in Hindi and English.
+An AI-powered farming assistant that helps Indian farmers with agricultural advice, crop management, and weather information. The application supports both Hindi and English languages and provides voice interaction capabilities.
 
 ## Features
 
-- 🗣️ Voice Assistant in Hindi
-- 🌾 Crop Recommendations
-- 💧 Smart Irrigation Tips
-- 🔍 Disease Detection
-- ⛅ Weather Updates
+- 🤖 AI-powered farming advice
+- 🌱 Crop disease detection
+- 🌦️ Real-time weather information
+- 🗣️ Voice interaction support
+- 🌍 Bilingual support (Hindi/English)
+- 📱 Responsive design
 
-## Setup & Deployment
+## Tech Stack
+
+- Frontend: HTML, CSS, JavaScript
+- AI Integration: OpenAI GPT-3.5 Turbo
+- Weather API: OpenWeatherMap
+- Voice Recognition: Web Speech API
+- Deployment: Vercel
+
+## Setup
 
 1. Clone the repository:
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/yourusername/kisaan-sathi-gpt.git
 cd kisaan-sathi-gpt
 ```
 
-2. Replace API Keys:
-- Open `script.js`
-- Replace `your-api-key-here` with your OpenAI API key
-- Replace `your-weather-api-key` with your OpenWeatherMap API key
-- Replace the Font Awesome kit URL in `index.html`
-
-3. Deploy to Vercel:
+2. Install dependencies:
 ```bash
-# Install Vercel CLI if you haven't
-npm install -g vercel
-
-# Login to Vercel
-vercel login
-
-# Deploy
-vercel
+npm install
 ```
 
-4. Environment Variables:
-Set these in your Vercel project settings:
-- `OPENAI_API_KEY`
-- `WEATHER_API_KEY`
-
-## Local Development
-
-1. Install a local server:
-```bash
-npm install -g http-server
+3. Create a `.env` file in the root directory and add your API keys:
+```env
+OPENAI_API_KEY=your_openai_api_key
+NEXT_PUBLIC_WEATHER_API_KEY=your_weather_api_key
 ```
 
-2. Run the server:
+4. Run the development server:
 ```bash
-http-server
+npm start
 ```
 
-3. Visit `http://localhost:8080`
+## Environment Variables
 
-## Security Notes
+The following environment variables are required:
 
-- Never commit API keys to the repository
-- Use environment variables for sensitive data
-- Enable CORS protection in production
+- `OPENAI_API_KEY`: Your OpenAI API key
+- `NEXT_PUBLIC_WEATHER_API_KEY`: Your OpenWeatherMap API key
+
+## Deployment
+
+This project is configured for deployment on Vercel. To deploy:
+
+1. Push your code to GitHub
+2. Connect your GitHub repository to Vercel
+3. Add the required environment variables in Vercel's dashboard
+4. Deploy!
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT License - Feel free to use and modify 
+This project is licensed under the MIT License - see the LICENSE file for details. 
