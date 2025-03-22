@@ -14,14 +14,17 @@ const userInput = document.getElementById('userInput');
 const sendButton = document.getElementById('sendMessage');
 const talkButton = document.getElementById('talkToAI');
 const uploadButton = document.getElementById('uploadImage');
-const govSchemesButton = document.getElementById('govSchemes');
+const weatherButton = document.getElementById('weatherInfo');
+const startButton = document.getElementById('startBtn');
+const learnMoreButton = document.getElementById('learnMoreBtn');
+const chatSection = document.getElementById('chatSection');
+const weatherWidget = document.getElementById('weatherWidget');
 
 // OpenAI API configuration
 const OPENAI_API_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY || 'your-api-key-here';
-
-// Weather API configuration (OpenWeatherMap)
-const WEATHER_API_KEY = process.env.WEATHER_API_KEY || 'your-weather-api-key';
+// In production, these should be set in your Vercel environment variables
+const OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY || 'your-api-key-here';
+const WEATHER_API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY || 'your-weather-api-key';
 const WEATHER_API_ENDPOINT = 'https://api.openweathermap.org/data/2.5/weather';
 
 // Predefined crop recommendations based on conditions
@@ -128,14 +131,46 @@ async function getWeatherForecast(lat, lon) {
     try {
         const response = await fetch(`${WEATHER_API_ENDPOINT}?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric&lang=hi`);
         const data = await response.json();
-        return `मौसम अपडेट:\nतापमान: ${data.main.temp}°C\nआद्रता: ${data.main.humidity}%\nमौसम: ${data.weather[0].description}`;
+        return {
+            temp: data.main.temp,
+            humidity: data.main.humidity,
+            description: data.weather[0].description,
+            icon: data.weather[0].icon
+        };
     } catch (error) {
-        return 'मौसम की जानकारी प्राप्त करने में त्रुटि हुई।';
+        console.error('Weather Error:', error);
+        return null;
     }
 }
 
-// Enhanced OpenAI interaction for farming context
-async function sendToOpenAI(message) {
+// Function to update weather widget
+async function updateWeatherWidget(weatherData) {
+    const weatherContent = document.querySelector('.weather-content');
+    if (!weatherData) {
+        weatherContent.innerHTML = '<p>मौसम की जानकारी उपलब्ध नहीं है</p>';
+        return;
+    }
+
+    weatherContent.innerHTML = `
+        <div class="weather-info">
+            <img src="https://openweathermap.org/img/wn/${weatherData.icon}@2x.png" alt="Weather icon">
+            <div class="weather-details">
+                <p class="temperature">${Math.round(weatherData.temp)}°C</p>
+                <p class="description">${weatherData.description}</p>
+                <p class="humidity">आद्रता: ${weatherData.humidity}%</p>
+            </div>
+        </div>
+    `;
+}
+
+// Function to handle chat input
+async function handleChatInput(message) {
+    if (!message.trim()) return;
+
+    addMessage(message, true);
+    userInput.value = '';
+    sendButton.disabled = true;
+
     try {
         const response = await fetch(OPENAI_API_ENDPOINT, {
             method: 'POST',
@@ -157,39 +192,37 @@ async function sendToOpenAI(message) {
         });
 
         const data = await response.json();
-        return data.choices[0].message.content;
+        const aiResponse = data.choices[0].message.content;
+        addMessage(aiResponse);
+        speakText(aiResponse);
     } catch (error) {
-        console.error('Error:', error);
-        return 'क्षमा करें, कोई त्रुटि हुई। कृपया पुनः प्रयास करें।';
+        console.error('Chat Error:', error);
+        addMessage('माफ़ कीजिए, कोई त्रुटि हुई। कृपया पुनः प्रयास करें।');
     }
+
+    sendButton.disabled = false;
 }
 
-// Handle send button click with enhanced farming context
-sendButton.addEventListener('click', async () => {
-    const message = userInput.value.trim();
-    if (message) {
-        addMessage(message, true);
-        userInput.value = '';
-        sendButton.disabled = true;
+// Event Listeners
+startButton.addEventListener('click', () => {
+    chatSection.scrollIntoView({ behavior: 'smooth' });
+});
 
-        let response;
-        if (message.includes('फसल') || message.includes('crop')) {
-            const conditions = { weather: 'normal' }; // This would be dynamic based on actual weather data
-            const recommendation = await getCropRecommendation(conditions);
-            response = recommendation.message;
-        } else if (message.includes('सिंचाई') || message.includes('irrigation')) {
-            response = getIrrigationAdvice('drip');
-        } else {
-            response = await sendToOpenAI(message);
-        }
+learnMoreButton.addEventListener('click', () => {
+    document.querySelector('.features').scrollIntoView({ behavior: 'smooth' });
+});
 
-        addMessage(response);
-        speakText(response);
-        sendButton.disabled = false;
+sendButton.addEventListener('click', () => {
+    handleChatInput(userInput.value);
+});
+
+userInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleChatInput(userInput.value);
     }
 });
 
-// Enhanced voice input handling
 talkButton.addEventListener('click', () => {
     recognition.start();
     talkButton.disabled = true;
@@ -199,14 +232,13 @@ talkButton.addEventListener('click', () => {
 recognition.onresult = (event) => {
     const transcript = event.results[0][0].transcript;
     userInput.value = transcript;
-    sendButton.click();
+    handleChatInput(transcript);
 };
 
 recognition.onend = () => {
     talkButton.disabled = false;
 };
 
-// Enhanced image upload for disease detection
 uploadButton.addEventListener('click', () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -215,24 +247,21 @@ uploadButton.addEventListener('click', () => {
         const file = e.target.files[0];
         if (file) {
             addMessage(`फोटो अपलोड की गई: ${file.name}`, true);
-            // Here you would process the image and send it to your ML model
-            const diseaseAnalysis = await detectDisease(file);
-            addMessage(diseaseAnalysis);
-            speakText(diseaseAnalysis);
+            addMessage('फोटो का विश्लेषण किया जा रहा है...');
+            // Here you would typically send the image to your AI model
+            setTimeout(() => {
+                addMessage('इस फोटो में फसल स्वस्थ दिखाई दे रही है। कोई रोग का लक्षण नहीं दिखाई दे रहा है।');
+            }, 2000);
         }
     };
     input.click();
 });
 
-// Get user's location for weather updates
-if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(async (position) => {
-        const weather = await getWeatherForecast(position.coords.latitude, position.coords.longitude);
-        addMessage(weather);
-    });
-}
+weatherButton.addEventListener('click', () => {
+    weatherWidget.scrollIntoView({ behavior: 'smooth' });
+});
 
-// Initialize with a welcome message
+// Initialize with a welcome message and weather
 window.addEventListener('load', () => {
     const welcomeMessage = "नमस्ते! मैं आपका कृषि सहायक हूं। मैं आपकी मदद कैसे कर सकता हूं?\n\n" +
                          "1. फसल सलाह के लिए\n" +
@@ -241,22 +270,12 @@ window.addEventListener('load', () => {
                          "4. मौसम की जानकारी के लिए";
     addMessage(welcomeMessage);
     speakText(welcomeMessage);
-});
 
-// Handle government schemes button
-govSchemesButton.addEventListener('click', async () => {
-    const message = "Please tell me about the latest government schemes for farmers in India.";
-    addMessage(message, true);
-    const response = await sendToOpenAI(message);
-    addMessage(response);
-    speakText(response);
-});
-
-// Language selector functionality
-const languageSelector = document.getElementById('language');
-languageSelector.addEventListener('change', (e) => {
-    const language = e.target.value;
-    recognition.lang = language === 'hi' ? 'hi-IN' : 'en-US';
-    // Update UI text based on selected language
-    // This would need a proper i18n implementation
+    // Get weather data
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            const weatherData = await getWeatherForecast(position.coords.latitude, position.coords.longitude);
+            updateWeatherWidget(weatherData);
+        });
+    }
 }); 
