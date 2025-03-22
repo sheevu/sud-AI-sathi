@@ -172,6 +172,13 @@ async function handleChatInput(message) {
     sendButton.disabled = true;
 
     try {
+        // First check if we have the API key
+        if (!OPENAI_API_KEY || OPENAI_API_KEY === 'your-api-key-here') {
+            addMessage('API कुंजी कॉन्फ़िगर नहीं की गई है। कृपया अपनी OpenAI API कुंजी सेट करें।');
+            sendButton.disabled = false;
+            return;
+        }
+
         const response = await fetch(OPENAI_API_ENDPOINT, {
             method: 'POST',
             headers: {
@@ -179,25 +186,51 @@ async function handleChatInput(message) {
                 'Authorization': `Bearer ${OPENAI_API_KEY}`
             },
             body: JSON.stringify({
-                model: "gpt-4",
-                messages: [{
-                    role: "system",
-                    content: "You are a knowledgeable farming assistant who speaks Hindi and English. Provide detailed agricultural advice with a focus on sustainable practices."
-                }, {
-                    role: "user",
-                    content: message
-                }],
-                temperature: 0.7
+                model: "gpt-3.5-turbo",
+                messages: [
+                    {
+                        role: "system",
+                        content: `You are किसान साथी (Kisaan Saathi), a knowledgeable farming assistant who speaks Hindi and English. 
+                        Your primary role is to help Indian farmers with agricultural advice, focusing on:
+                        1. Sustainable farming practices
+                        2. Crop disease identification and treatment
+                        3. Weather-based farming recommendations
+                        4. Government schemes and support
+                        5. Modern farming techniques
+                        
+                        Always respond in Hindi first, followed by English translation if needed.
+                        Keep responses practical and actionable.
+                        Include traditional farming wisdom when relevant.`
+                    },
+                    {
+                        role: "user",
+                        content: message
+                    }
+                ],
+                temperature: 0.7,
+                max_tokens: 500
             })
         });
 
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
+        if (data.error) {
+            throw new Error(data.error.message);
+        }
+
         const aiResponse = data.choices[0].message.content;
         addMessage(aiResponse);
-        speakText(aiResponse);
+        
+        // Only speak the Hindi part of the response
+        const hindiResponse = aiResponse.split('\n')[0];
+        speakText(hindiResponse);
+
     } catch (error) {
         console.error('Chat Error:', error);
-        addMessage('माफ़ कीजिए, कोई त्रुटि हुई। कृपया पुनः प्रयास करें।');
+        addMessage('माफ़ कीजिए, कोई त्रुटि हुई। कृपया पुनः प्रयास करें।\n\nSorry, an error occurred. Please try again.');
     }
 
     sendButton.disabled = false;
@@ -261,15 +294,11 @@ weatherButton.addEventListener('click', () => {
     weatherWidget.scrollIntoView({ behavior: 'smooth' });
 });
 
-// Initialize with a welcome message and weather
+// Welcome message when the page loads
 window.addEventListener('load', () => {
-    const welcomeMessage = "नमस्ते! मैं आपका कृषि सहायक हूं। मैं आपकी मदद कैसे कर सकता हूं?\n\n" +
-                         "1. फसल सलाह के लिए\n" +
-                         "2. बीमारी पहचान के लिए फोटो अपलोड करें\n" +
-                         "3. सिंचाई सलाह के लिए\n" +
-                         "4. मौसम की जानकारी के लिए";
-    addMessage(welcomeMessage);
-    speakText(welcomeMessage);
+    setTimeout(() => {
+        addMessage('नमस्ते! मैं किसान साथी हूं, आपकी कृषि सहायता के लिए उपस्थित हूं। आप मुझसे कृषि संबंधी कोई भी प्रश्न पूछ सकते हैं।\n\nHello! I am Kisaan Saathi, here to help you with farming. You can ask me any agriculture-related questions.');
+    }, 1000);
 
     // Get weather data
     if (navigator.geolocation) {
