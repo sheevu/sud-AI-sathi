@@ -365,22 +365,40 @@ document.addEventListener('DOMContentLoaded', function() {
         updateWeather();
     }
 
-    // Weather functionality
-    function updateWeather() {
-        const temperature = Math.floor(Math.random() * 15) + 20;
-        const humidity = Math.floor(Math.random() * 30) + 50;
-        const descriptions = {
-            hi: ['साफ़ आसमान', 'आंशिक बादल', 'बादल छाए'],
-            en: ['Clear Sky', 'Partly Cloudy', 'Cloudy']
-        };
-        const descIndex = Math.floor(Math.random() * 3);
+  function updateWeather() {
+  if (!navigator.geolocation) {
+    document.getElementById("weatherDescription").textContent = "GPS उपलब्ध नहीं है";
+    return;
+  }
 
-        document.getElementById('temperature').textContent = `${temperature}°C`;
-        document.getElementById('humidity').textContent = `${translations[currentLang].humidity}: ${humidity}%`;
-        document.getElementById('weatherDescription').textContent = descriptions[currentLang][descIndex];
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    const apiKey = "d404bc3b32msh0c92cb8f3ea7cfap1d6e84jsn3ed1ad9bde9e"; // Replace with your actual key
+
+    const url = `https://weather-by-api-ninjas.p.rapidapi.com/v1/weather?lat=${lat}&lon=${lon}`;
+    const options = {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Key": apiKey,
+        "X-RapidAPI-Host": "weather-by-api-ninjas.p.rapidapi.com"
+      }
+    };
+
+    try {
+      const response = await fetch(url, options);
+      const data = await response.json();
+
+      document.getElementById("temperature").textContent = `${data.temp}°C`;
+      document.getElementById("humidity").textContent = `आर्द्रता: ${data.humidity}%`;
+      document.getElementById("weatherDescription").textContent = "ताज़ा जानकारी प्राप्त हो गई";
+    } catch (error) {
+      document.getElementById("weatherDescription").textContent = "डेटा नहीं मिला";
+      console.error(error);
     }
-
-    // Initialize weather
+  });
+}
+ // Initialize weather
     updateWeather();
     // Initial language update
     updateLanguage();
