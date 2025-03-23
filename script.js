@@ -215,22 +215,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add welcome message
     addMessage('assistant', translations[currentLang].welcome);
 
-    // Function to add message to chat
-    function addMessage(sender, text) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${sender}`;
-        
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'message-content';
-        contentDiv.textContent = text;
-        
-        messageDiv.appendChild(contentDiv);
-        chatMessages.appendChild(messageDiv);
-        
-        // Scroll to bottom
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
     // Send message function
     async function sendMessage() {
         const message = userInput.value.trim();
@@ -297,91 +281,39 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-  // ✅ Final integrated version of script.js with working button handlers for Weather, Crop & Irrigation
-// 📌 This includes DOMContentLoaded block and adds prompt-to-chat injection safely
-
-// Your existing speech recognition, weather, disease detection etc. remains untouched.
-
-// Paste this into your script.js to fully activate the Kisaan GPT buttons
-
-// Inside document.addEventListener block:
-document.addEventListener('DOMContentLoaded', function() {
-  // (Existing variable declarations)
-
-  // Existing welcome message
-  addMessage('assistant', translations[currentLang].welcome);
-
-  // ✅ Enhanced Buttons to send pre-defined queries
-
-  weatherButton.addEventListener('click', () => {
-    const prompt = 'Lucknow ka mausam kaisa hai?';
-    userInput.value = prompt;
-    sendMessage();
-  });
-
-  const cropButton = document.getElementById('cropButton');
-  if (cropButton) {
-    cropButton.addEventListener('click', () => {
-      const prompt = 'March mein kis crop ki kheti karun?';
-      userInput.value = prompt;
-      sendMessage();
-    });
-  }
-
-  const irrigationButton = document.getElementById('irrigationButton');
-  if (irrigationButton) {
-    irrigationButton.addEventListener('click', () => {
-      const prompt = 'Paani ki bachat ke liye kaunsa irrigation method best hai?';
-      userInput.value = prompt;
-      sendMessage();
-    });
-  }
-
-  // All other event listeners remain same
-
-  // Example: Enter key listener
-  userInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  });
-
-  // Weather & UI init calls
-  updateWeather();
-  updateLanguage();
-});
-
-    // Language switching
-    languageSelector.addEventListener('change', function(e) {
-        currentLang = e.target.value;
-        updateLanguage();
+    // Enhanced Buttons to send pre-defined queries
+    weatherButton.addEventListener('click', () => {
+        const prompt = 'Lucknow ka mausam kaisa hai?';
+        userInput.value = prompt;
+        sendMessage();
     });
 
-    // Update language throughout the interface
-    function updateLanguage() {
-        userInput.placeholder = translations[currentLang].placeholder;
-        document.querySelector('.features h2').textContent = translations[currentLang].features;
-        document.querySelector('.chat-header h3').textContent = translations[currentLang].askQuestion;
-        updateWeather();
+    const cropButton = document.getElementById('cropButton');
+    if (cropButton) {
+        cropButton.addEventListener('click', () => {
+            const prompt = 'March mein kis crop ki kheti karun?';
+            userInput.value = prompt;
+            sendMessage();
+        });
     }
 
-    // Weather functionality
-    function updateWeather() {
-        const temperature = Math.floor(Math.random() * 15) + 20;
-        const humidity = Math.floor(Math.random() * 30) + 50;
-        const descriptions = {
-            hi: ['साफ़ आसमान', 'आंशिक बादल', 'बादल छाए'],
-            en: ['Clear Sky', 'Partly Cloudy', 'Cloudy']
-        };
-        const descIndex = Math.floor(Math.random() * 3);
-
-        document.getElementById('temperature').textContent = `${temperature}°C`;
-        document.getElementById('humidity').textContent = `${translations[currentLang].humidity}: ${humidity}%`;
-        document.getElementById('weatherDescription').textContent = descriptions[currentLang][descIndex];
+    const irrigationButton = document.getElementById('irrigationButton');
+    if (irrigationButton) {
+        irrigationButton.addEventListener('click', () => {
+            const prompt = 'Paani ki bachat ke liye kaunsa irrigation method best hai?';
+            userInput.value = prompt;
+            sendMessage();
+        });
     }
 
-    // Button click handlers
+    // Other event listeners
+    userInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
     startButton.addEventListener('click', () => {
         document.querySelector('.chat-container').scrollIntoView({ behavior: 'smooth' });
     });
@@ -419,6 +351,35 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
+    // Language switching
+    languageSelector.addEventListener('change', function(e) {
+        currentLang = e.target.value;
+        updateLanguage();
+    });
+
+    // Update language throughout the interface
+    function updateLanguage() {
+        userInput.placeholder = translations[currentLang].placeholder;
+        document.querySelector('.features h2').textContent = translations[currentLang].features;
+        document.querySelector('.chat-header h3').textContent = translations[currentLang].askQuestion;
+        updateWeather();
+    }
+
+    // Weather functionality
+    function updateWeather() {
+        const temperature = Math.floor(Math.random() * 15) + 20;
+        const humidity = Math.floor(Math.random() * 30) + 50;
+        const descriptions = {
+            hi: ['साफ़ आसमान', 'आंशिक बादल', 'बादल छाए'],
+            en: ['Clear Sky', 'Partly Cloudy', 'Cloudy']
+        };
+        const descIndex = Math.floor(Math.random() * 3);
+
+        document.getElementById('temperature').textContent = `${temperature}°C`;
+        document.getElementById('humidity').textContent = `${translations[currentLang].humidity}: ${humidity}%`;
+        document.getElementById('weatherDescription').textContent = descriptions[currentLang][descIndex];
+    }
+
     // Initialize weather
     updateWeather();
     // Initial language update
@@ -438,4 +399,4 @@ window.addEventListener('load', () => {
             updateWeatherWidget(weatherData);
         });
     }
-}); 
+});
