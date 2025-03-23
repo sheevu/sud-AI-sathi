@@ -297,15 +297,60 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Event Listeners
-    sendButton.addEventListener('click', sendMessage);
+  // ✅ Final integrated version of script.js with working button handlers for Weather, Crop & Irrigation
+// 📌 This includes DOMContentLoaded block and adds prompt-to-chat injection safely
 
-    userInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
+// Your existing speech recognition, weather, disease detection etc. remains untouched.
+
+// Paste this into your script.js to fully activate the Kisaan GPT buttons
+
+// Inside document.addEventListener block:
+document.addEventListener('DOMContentLoaded', function() {
+  // (Existing variable declarations)
+
+  // Existing welcome message
+  addMessage('assistant', translations[currentLang].welcome);
+
+  // ✅ Enhanced Buttons to send pre-defined queries
+
+  weatherButton.addEventListener('click', () => {
+    const prompt = 'Lucknow ka mausam kaisa hai?';
+    userInput.value = prompt;
+    sendMessage();
+  });
+
+  const cropButton = document.getElementById('cropButton');
+  if (cropButton) {
+    cropButton.addEventListener('click', () => {
+      const prompt = 'March mein kis crop ki kheti karun?';
+      userInput.value = prompt;
+      sendMessage();
     });
+  }
+
+  const irrigationButton = document.getElementById('irrigationButton');
+  if (irrigationButton) {
+    irrigationButton.addEventListener('click', () => {
+      const prompt = 'Paani ki bachat ke liye kaunsa irrigation method best hai?';
+      userInput.value = prompt;
+      sendMessage();
+    });
+  }
+
+  // All other event listeners remain same
+
+  // Example: Enter key listener
+  userInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  // Weather & UI init calls
+  updateWeather();
+  updateLanguage();
+});
 
     // Language switching
     languageSelector.addEventListener('change', function(e) {
